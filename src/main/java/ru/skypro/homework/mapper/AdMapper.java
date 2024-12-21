@@ -31,7 +31,7 @@ public interface AdMapper {
 
     Collection<AdDTO> adsToAdsListDto(Collection<Ad> adsCollection);
 
-    default String imageMapper(Ad ad){
+     default String imageMapper(Ad ad){
         return "/ads/" + ad.getId() + "/image";
     }
 
