@@ -1,20 +1,9 @@
 package ru.skypro.homework.dto;
 
-import java.net.URI;
 import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import org.openapitools.jackson.nullable.JsonNullable;
-import java.time.OffsetDateTime;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 
-import java.util.*;
 import javax.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-12-16T00:47:56.416674900+05:00[Asia/Yekaterinburg]", comments = "Generator version: 7.8.0")
@@ -23,9 +12,9 @@ public class Ads {
   private Integer count;/**
    * общее количество объявлений
    */
-  private List<Ad> results;
+  private List<AdDTO> results;
 
-  public Ads(Integer count, List<Ad> results) {
+  public Ads(Integer count, List<AdDTO> results) {
     this.count = count;
     this.results = results;
   }
@@ -38,11 +27,11 @@ public class Ads {
     this.count = count;
   }
 
-  public List<Ad> getResults() {
+  public List<AdDTO> getResults() {
     return results;
   }
 
-  public void setResults(List<Ad> results) {
+  public void setResults(List<AdDTO> results) {
     this.results = results;
   }
 

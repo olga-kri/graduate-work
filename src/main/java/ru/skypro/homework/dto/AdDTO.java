@@ -1,22 +1,13 @@
 package ru.skypro.homework.dto;
 
-import java.net.URI;
 import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import org.openapitools.jackson.nullable.JsonNullable;
-import java.time.OffsetDateTime;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 
-import java.util.*;
 import javax.annotation.Generated;
 
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-12-16T00:47:56.416674900+05:00[Asia/Yekaterinburg]", comments = "Generator version: 7.8.0")
-public class Ad {
+public class AdDTO {
 
   private Integer author;
   /**
@@ -34,7 +25,7 @@ public class Ad {
   private Integer price;
   private String title;
 
-  public Ad(Integer author, String image, Integer pk, Integer price, String title) {
+  public AdDTO(Integer author, String image, Integer pk, Integer price, String title) {
     this.author = author;
     this.image = image;
     this.pk = pk;
@@ -86,12 +77,12 @@ public class Ad {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Ad ad = (Ad) o;
-    return Objects.equals(this.author, ad.author) &&
-        Objects.equals(this.image, ad.image) &&
-        Objects.equals(this.pk, ad.pk) &&
-        Objects.equals(this.price, ad.price) &&
-        Objects.equals(this.title, ad.title);
+    AdDTO adDTO = (AdDTO) o;
+    return Objects.equals(this.author, adDTO.author) &&
+        Objects.equals(this.image, adDTO.image) &&
+        Objects.equals(this.pk, adDTO.pk) &&
+        Objects.equals(this.price, adDTO.price) &&
+        Objects.equals(this.title, adDTO.title);
   }
 
   @Override

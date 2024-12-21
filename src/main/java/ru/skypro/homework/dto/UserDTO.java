@@ -16,7 +16,7 @@ import java.util.*;
 import javax.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-12-16T00:47:56.416674900+05:00[Asia/Yekaterinburg]", comments = "Generator version: 7.8.0")
-public class User {
+public class UserDTO {
 
   private Integer id;
 
@@ -35,7 +35,7 @@ public class User {
 
   private String image;
 
-  public User(Integer id, String email, String firstName, String lastName, String phone, Role role, String image) {
+  public UserDTO(Integer id, String email, String firstName, String lastName, String phone, Role role, String image) {
     this.id = id;
     this.email = email;
     this.firstName = firstName;
@@ -109,7 +109,7 @@ public class User {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    User user = (User) o;
+    UserDTO user = (UserDTO) o;
     return Objects.equals(this.id, user.id) &&
         Objects.equals(this.email, user.email) &&
         Objects.equals(this.firstName, user.firstName) &&
