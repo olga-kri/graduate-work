@@ -8,7 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.Ad;
+import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.ExtendedAd;
@@ -32,9 +32,9 @@ public class AdController {
     }
 
     @GetMapping("/my")
-    public List <Ad> getMyAds() {
-        List <Ad> adList = List.of();
-        return adList;
+    public List <AdDTO> getMyAds() {
+        List <AdDTO> adDTOList = List.of();
+        return adDTOList;
     }
 
     @GetMapping
@@ -46,31 +46,31 @@ public class AdController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
-    public Ad create(
+    public AdDTO create(
             @Valid @RequestPart CreateOrUpdateAd properties,
             @RequestPart MultipartFile image) {
-        Ad ad = null;
-        return ad;
+        AdDTO adDTO = null;
+        return adDTO;
     }
 
     @PatchMapping("/{id}")
     @Transactional
     @PreAuthorize("@userService.hasPermission(@adService.getAd(#id))")
-    public Ad patchProperties(
+    public AdDTO patchProperties(
             @NotNull @PathVariable Integer id,
             @Valid @RequestBody CreateOrUpdateAd properties) {
-        Ad ad = null;
-        return ad;
+        AdDTO adDTO = null;
+        return adDTO;
     }
 
     @PatchMapping(path="/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Transactional
     @PreAuthorize("@userService.hasPermission(@adService.getAd(#id))")
-    public Ad patchImg(
+    public AdDTO patchImg(
             @NotNull @PathVariable Integer id,
             @RequestPart MultipartFile image) {
-        Ad ad = null;
-        return ad;
+        AdDTO adDTO = null;
+        return adDTO;
     }
 
     @DeleteMapping("/{id}")
