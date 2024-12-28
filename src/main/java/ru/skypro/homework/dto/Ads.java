@@ -12,9 +12,9 @@ public class Ads {
   private Integer count;/**
    * общее количество объявлений
    */
-  private List<AdDTO> results;
+  private List<AdDto> results;
 
-  public Ads(Integer count, List<AdDTO> results) {
+  public Ads() {
     this.count = count;
     this.results = results;
   }
@@ -27,11 +27,11 @@ public class Ads {
     this.count = count;
   }
 
-  public List<AdDTO> getResults() {
+  public List<AdDto> getResults() {
     return results;
   }
 
-  public void setResults(List<AdDTO> results) {
+  public void setResults(List<AdDto> results) {
     this.results = results;
   }
 

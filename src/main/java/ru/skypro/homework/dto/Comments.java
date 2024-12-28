@@ -15,9 +15,9 @@ public class Comments {
   private Integer count;/**
    * общее количество комментариев
    */
-  private List<CommentDTO> results;
+  private List<CommentDto> results;
 
-  public Comments(Integer count, List<CommentDTO> results) {
+  public Comments(Integer count, List<CommentDto> results) {
     this.count = count;
     this.results = results;
   }
@@ -30,11 +30,11 @@ public class Comments {
     this.count = count;
   }
 
-  public List<CommentDTO> getResults() {
+  public List<CommentDto> getResults() {
     return results;
   }
 
-  public void setResults(List<CommentDTO> results) {
+  public void setResults(List<CommentDto> results) {
     this.results = results;
   }
 
