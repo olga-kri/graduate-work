@@ -22,7 +22,10 @@ import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.ImageService;
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.stream.Collectors;
+
+import static org.aspectj.util.LangUtil.isEmpty;
 
 
 @Service
@@ -42,6 +45,7 @@ public class AdServiceImpl implements AdService {
             throw new IllegalArgumentException("Price cannot be negative");
         }
         User user = userRepository.findUserByEmailIgnoreCase(authentication.getName()).orElseThrow(UserNotFoundException::new);
+        log.info("Request to create new ad");
         Ad ad = new Ad();
         ad.setTitle(createOrUpdateAd.getTitle());
         ad.setPrice(createOrUpdateAd.getPrice());
@@ -55,11 +59,13 @@ public class AdServiceImpl implements AdService {
         ad.setImage(image);
         ad.setAuthor(user);
         Ad savedAd = adRepository.save(ad);
+        log.info("Save new ad ID:" + ad.getId());
         return adMapper.adToAdsDTO(savedAd);
     }
 
     @Override
     public ExtendedAd getAdById(Integer id) {
+        log.info("Request to get full info about ad");
         return adRepository.findById(id).map(adMapper::mapExtended).orElseThrow(AdNotFoundException::new);
     }
 
@@ -73,10 +79,11 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public Ads getAllAds() {
-        Ads ads = new Ads();
-        ads.setResults(adRepository.findAll().stream().map(adMapper::adToAdsDTO).collect(Collectors.toList()));
-        return ads;
-    }
+       Ads ads = new Ads();
+       ads.setResults(adRepository.findAll().stream().map(adMapper::adToAdsDTO).collect(Collectors.toList()));
+       ads.setCount((int) adRepository.count());
+       return ads;
+  }
 
     @Transactional
     @Override
@@ -102,7 +109,8 @@ public class AdServiceImpl implements AdService {
 
     @Transactional
     @Override
-    public byte[] updateImage(MultipartFile file, Authentication authentication, Integer id) throws IOException {
+    public AdDto updateImage(MultipartFile file, Authentication authentication, Integer id) throws IOException {
+        log.info("Request to update image");
         Ad updateAdImage = adRepository.findById(id).orElseThrow(AdNotFoundException::new);
         Integer previousImageId = updateAdImage.getImage().getId();
         imageService.deleteImage(previousImageId);
@@ -112,7 +120,7 @@ public class AdServiceImpl implements AdService {
             throw new RuntimeException("Unable to download image");
         }
         adRepository.save(updateAdImage);
-        return new byte[0];
+        return adMapper.adToAdsDTO(updateAdImage);
     }
 
     @Override
@@ -122,6 +130,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public byte[] getAdImage(Integer adId) {
-        return imageService.getImage(adRepository.findById(adId).orElseThrow(AdNotFoundException::new).getImage().getId());
+        Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
+        return ad.getImage().getData();
     }
 }

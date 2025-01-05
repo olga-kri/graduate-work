@@ -39,16 +39,17 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto addComment(Integer adId, CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
-        Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
+        log.info("addComment method");
         Comment comment = new Comment();
+        Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
         comment.setAd(ad);
         comment.setText(createOrUpdateComment.getText());
         comment.setCreatedAt(LocalDateTime.now());
         User currentUser = userRepository.findUserByEmailIgnoreCase(authentication.getName())
                 .orElseThrow(UserNotFoundException::new);
         comment.setAuthor(currentUser);
-        Comment savedComment = commentRepository.save(comment);
-        return commentMapper.toCommentDto(savedComment);
+        commentRepository.save(comment);
+        return commentMapper.toCommentDto(comment);
     }
 
     @Override

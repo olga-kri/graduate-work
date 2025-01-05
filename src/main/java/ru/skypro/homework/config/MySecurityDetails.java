@@ -23,6 +23,11 @@ public class MySecurityDetails implements UserDetails {
         this.securityDto = userDto;
     }
 
+    public Integer getIdUserDto() {
+        return Optional.ofNullable(securityDto)
+                .map(SecurityDto::getId)
+                .orElse(null);
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
       return   Optional.ofNullable(securityDto)

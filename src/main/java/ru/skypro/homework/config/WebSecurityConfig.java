@@ -5,8 +5,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,44 +21,48 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @EnableWebSecurity
 @Configuration
-@RequiredArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
     private final MySecurityDetailsService mySecurityDetailsService;
 
+    public WebSecurityConfig(MySecurityDetailsService mySecurityDetailsService) {
+        this.mySecurityDetailsService = mySecurityDetailsService;
+    }
+
     private static final String[] AUTH_WHITELIST = {
+            "/ads",
+            "/ads/*/image",
+            "/users/*/image",
+            "/login",
+            "/register",
             "/swagger-resources/**",
             "/swagger-ui.html",
             "/v3/api-docs",
-            "/webjars/**",
-            "/login",
-            "/register"
+            "/webjars/**"
     };
 
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf()
+        http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .csrf()
                 .disable()
                 .authorizeHttpRequests(
-                        authorization ->
+                        (authorization) ->
                                 authorization
                                         .mvcMatchers(AUTH_WHITELIST)
                                         .permitAll()
-                )
+                                        .mvcMatchers("/ads/**", "/users/**")
+                                        .authenticated())
                 .cors()
                 .and()
                 .httpBasic(withDefaults());
         return http.build();
     }
 
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(mySecurityDetailsService);
-        provider.setPasswordEncoder(passwordEncoder());
-        return provider;
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

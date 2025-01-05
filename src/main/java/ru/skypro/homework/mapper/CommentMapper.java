@@ -18,7 +18,7 @@ import java.util.List;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CommentMapper {
     @Mapping(source = "author.id", target = "author")
-    @Mapping(target = "authorImage", expression = "java(imageFromDto(comment))")
+    @Mapping(target = "authorImage", expression = "java(image(comment))")
     @Mapping(source = "author.firstName", target = "authorFirstName")
     @Mapping(source = "id", target = "pk")
     CommentDto toCommentDto(Comment comment);
@@ -33,8 +33,8 @@ public interface CommentMapper {
 
     List<CommentDto> toCommentsListDto(Collection<Comment> commentCollection);
 
-    default String imageFromDto(Comment comment) {
-        int id = comment.getId();
+    default String image(Comment comment) {
+        int id = comment.getAuthor().getId();
         return "/comments/" + id + "/image";
     }
 

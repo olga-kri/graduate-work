@@ -44,15 +44,11 @@ public class CommentController {
         return ResponseEntity.ok(commentService.getUserImage(id));
     }
 
-    @PostMapping( value = "/ads/{id}/comments",
-                  produces = {"application/json"},
-                  consumes = {"application/json"})
-    public ResponseEntity<CommentDto> addComment(
-            @Parameter(name = "id", required = true) @PathVariable("id") Integer id,
-            @Parameter(name = "CreateOrUpdateComment", description = "")
-            @Valid @RequestBody(required = false) CreateOrUpdateComment createOrUpdateComment,
-            @NotNull Authentication authentication) {
-        return ResponseEntity.ok(commentService.addComment(id, createOrUpdateComment, authentication));
+    @PostMapping( value = "/ads/{id}/comments")
+    public ResponseEntity<CommentDto> addComment (@PathVariable int id,
+                                                  @RequestBody CreateOrUpdateComment comment,
+                                                  Authentication authentication) {
+        return ResponseEntity.ok(commentService.addComment(id, comment, authentication));
     }
 
     @PreAuthorize("@commentServiceImpl.getComment(#commentId).author.email.equals(authentication.name) or hasAuthority('ROLE_ADMIN')")

@@ -15,6 +15,7 @@ import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.service.AdService;
 
 
@@ -23,6 +24,7 @@ import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -31,9 +33,11 @@ import java.util.List;
 public class AdController {
 
     private final AdService adService;
+    private final AdRepository adRepository;
 
-    public AdController(AdService adService) {
+    public AdController(AdService adService, AdRepository adRepository) {
         this.adService = adService;
+        this.adRepository = adRepository;
     }
 
     @GetMapping(value = "/{id}",
@@ -53,6 +57,7 @@ public class AdController {
     public ResponseEntity<Ads> getAllAds() {
         return ResponseEntity.ok(adService.getAllAds());
     }
+
 
     @GetMapping(value = "/{id}/image",
             produces = MediaType.IMAGE_PNG_VALUE)
@@ -83,14 +88,14 @@ public class AdController {
         return ResponseEntity.ok(adService.updateAd(createOrUpdateAd, authentication, id));
     }
 
-    @PreAuthorize("@adServiceImpl.getAd(#id).email.equals(authentication.name) or hasAuthority('ROLE_ADMIN')")
-    @PatchMapping(value = "/{id}/image",
+  @PreAuthorize("@adServiceImpl.getAd(#id).email.equals(authentication.name) or hasAuthority('ROLE_ADMIN')")
+   @PatchMapping(value = "/{id}/image",
             produces = {"application/octet-stream"},
             consumes = {"multipart/form-data"})
-    public ResponseEntity<List<byte[]>> updateImage(
+    public ResponseEntity<AdDto> updateImage(
             @Parameter(name = "id", required = true) @PathVariable("id") Integer id,
-            @Parameter(name = "image", required = true) @RequestPart(value = "image") MultipartFile image, Authentication authentication) throws IOException {
-        return ResponseEntity.ok(Collections.singletonList(adService.updateImage(image, authentication,id)));
+           @Parameter(name = "image", required = true) @RequestPart(value = "image") MultipartFile image, Authentication authentication) throws IOException {
+        return ResponseEntity.ok(adService.updateImage(image, authentication,id));
     }
 
     @PreAuthorize("@adServiceImpl.getAd(#id).email.equals(authentication.name) or hasAuthority('ROLE_ADMIN')")

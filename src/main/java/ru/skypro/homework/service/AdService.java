@@ -10,6 +10,7 @@ import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.entity.Ad;
 
 import java.io.IOException;
+import java.util.Collection;
 
 public interface AdService {
     AdDto createAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile file, Authentication authentication) throws IOException;
@@ -24,7 +25,7 @@ public interface AdService {
 
     AdDto updateAd(CreateOrUpdateAd createOrUpdateAdDto, Authentication authentication, Integer id);
 
-    byte[] updateImage(MultipartFile file, Authentication authentication, Integer id) throws IOException;
+    AdDto updateImage(MultipartFile file, Authentication authentication, Integer id) throws IOException;
 
     Ad getAd(Integer id);
 
