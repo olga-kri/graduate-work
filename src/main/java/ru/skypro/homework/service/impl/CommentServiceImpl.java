@@ -37,6 +37,11 @@ public class CommentServiceImpl implements CommentService {
     private final UserRepository userRepository;
     private final CommentMapper commentMapper;
 
+    /**
+     * Реализация сервиса для управления комментариями.
+     * Предоставляет методы для добавления, удаления, обновления и получения комментариев,
+     * а также получения изображения пользователя, оставившего комментарий.
+     */
     @Override
     public CommentDto addComment(Integer adId, CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
         log.info("addComment method");
@@ -52,6 +57,13 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.toCommentDto(comment);
     }
 
+    /**
+     * Получает все комментарии к объявлению.
+     *
+     * @param adId идентификатор объявления.
+     * @return DTO всех комментариев к объявлению.
+     * @throws AdNotFoundException если объявление не найдено.
+     */
     @Override
     public Comments getComments(Integer adId) {
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
@@ -64,11 +76,26 @@ public class CommentServiceImpl implements CommentService {
         return commentsDto;
     }
 
+    /**
+     * Получает комментарий по его идентификатору.
+     * @param commentId идентификатор комментария.
+     * @return комментарий.
+     * @throws CommentNotFoundException если комментарий не найден.
+     */
     @Override
     public Comment getComment(Integer commentId) {
         return commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
     }
 
+    /**
+     * Обновляет текст комментария.
+     * @param adId идентификатор объявления, к которому принадлежит комментарий.
+     * @param commentId идентификатор комментария для обновления.
+     * @param createOrUpdateCommentDto новые данные комментария.
+     * @return DTO обновленного комментария.
+     * @throws CommentNotFoundException если комментарий не найден.
+     * @throws AdNotFoundException если объявление не найдено.
+     */
     @Override
     public CommentDto updateComment(Integer adId, Integer commentId, CreateOrUpdateComment createOrUpdateCommentDto) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
@@ -77,6 +104,13 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.toCommentDto(updatedComment);
     }
 
+    /**
+     * Удаляет комментарий из объявления.
+     * @param adId идентификатор объявления, к которому принадлежит комментарий.
+     * @param commentId идентификатор комментария для удаления.
+     * @throws CommentNotFoundException если комментарий не найден.
+     * @throws AdNotFoundException если объявление не найдено.
+     */
     @Override
     public void deleteComment(Integer adId, Integer commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
@@ -85,6 +119,10 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.delete(comment);
     }
 
+    /**
+     * Удаляет все комментарии из объявления.
+     * @param adId идентификатор объявления, из которого удаляются все комментарии.
+     */
     @Override
     public void deleteAllByAdId(Integer adId) {
         commentRepository.deleteAllByAdId(adId);
