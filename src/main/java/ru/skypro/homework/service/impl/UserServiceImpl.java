@@ -21,6 +21,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+/**
+ * Реализация сервиса для управления пользователями.
+ * Реализует методы для получения информации о пользователе, обновления данных пользователя,
+ * смены пароля и управления изображением пользователя.
+ */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -31,6 +37,12 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder encoder;
     private final ImageService imageService;
 
+    /**
+     * Обновляет пароль пользователя.
+     * @param newPassword DTO с новыми данными пароля.
+     * @param authentication информация о текущем пользователе.
+     * @throws UserNotFoundException если пользователь не найден.
+     */
     @Override
     public void newPassword(NewPassword newPassword, Authentication authentication) {
         User user = userRepository.findUserByEmailIgnoreCase(authentication.getName()).orElseThrow(UserNotFoundException::new);
@@ -39,6 +51,13 @@ public class UserServiceImpl implements UserService {
         mapper.userToUserDto(user);
     }
 
+    /**
+     * Обновляет информацию о пользователе.
+     * @param updateUserDto DTO с новыми данными пользователя.
+     * @param authentication информация о текущем пользователе.
+     * @return DTO обновленного пользователя.
+     * @throws UserNotFoundException если пользователь не найден.
+     */
     @Override
     public UserDto updateUserDto(UpdateUser updateUserDto, Authentication authentication) {
         User user = userRepository.findUserByEmailIgnoreCase(authentication.getName()).orElseThrow(UserNotFoundException::new);
@@ -49,6 +68,13 @@ public class UserServiceImpl implements UserService {
         return mapper.userToUserDto(user);
     }
 
+    /**
+     * Обновляет изображение пользователя.
+     * @param file файл изображения, которое нужно загрузить.
+     * @param authentication информация о текущем пользователе.
+     * @throws UserNotFoundException если пользователь не найден.
+     * @throws RuntimeException если произошла ошибка при загрузке изображения.
+     */
     @Override
     public void updateUserImage(MultipartFile file, Authentication authentication) throws IOException {
         User user = userRepository.findUserByEmailIgnoreCase(authentication.getName())
@@ -62,11 +88,26 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * Получает информацию о текущем авторизованном пользователе.
+     * @param authentication информация о текущем пользователе.
+     * @return DTO текущего авторизованного пользователя.
+     * @throws UserNotFoundException если пользователь не найден.
+     */
     @Override
     public UserDto getAuthorizedUserDto(Authentication authentication) {
         return mapper.userToUserDto(userRepository.findUserByEmailIgnoreCase(authentication.getName()).orElseThrow(UserNotFoundException::new));
     }
 
+    /**
+     * Получает изображение пользователя по его идентификатору.
+     * Либо, если пользователь не загрузил фото, возвращает фото аватара по умолчанию
+     * из файла "src/main/resources/empthyPhoto.png"
+     * @param userId идентификатор пользователя.
+     * @return массив байтов, представляющий изображение пользователя.
+     * @throws IOException если произошла ошибка при чтении изображения.
+     * @throws UserNotFoundException если пользователь не найден.
+     */
     @Override
     public byte[] getUserImage(Integer userId) throws IOException {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
