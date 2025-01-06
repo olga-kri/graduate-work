@@ -4,6 +4,7 @@ import lombok.Data;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -31,4 +32,10 @@ public class User {
     @OneToOne
     @JoinColumn(name = "image_id")
     private Image image;
+
+    @OneToMany(mappedBy = "author")
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "author")
+    private List<Ad> ads;
 }
